@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário Interativo</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>Formulário Interativo</header>
+    <form id="interactiveForm">
+        <div class="form-group">
+            <label for="question1">Pergunta 1</label>
+            <input type="text" id="question1" name="question1">
+        </div>
+
+        <div class="form-group">
+            <label for="question2">Pergunta 2</label>
+            <input type="text" id="question2" name="question2">
+        </div>
+
+        <div class="form-group">
+            <label>Pergunta 3</label>
+            <div>
+                <input type="radio" id="option1" name="question3" value="option1">
+                <label for="option1">Opção 1</label>
+            </div>
+            <div>
+                <input type="radio" id="option2" name="question3" value="option2">
+                <label for="option2">Opção 2</label>
+            </div>
+        </div>
+
+        <!-- Perguntas 4, 6 e 9 aparecem com base nas respostas anteriores -->
+        <!-- Adicione a lógica condicional no script.js -->
+
+        <div class="form-group" id="question4">
+            <label for="question4">Pergunta 4</label>
+            <input type="text" id="question4" name="question4">
+        </div>
+
+        <div class="form-group">
+            <label>Pergunta 5</label>
+            <div>
+                <input type="radio" id="option3" name="question5" value="option3">
+                <label for="option3">Opção 3</label>
+            </div>
+            <div>
+                <input type="radio" id="option4" name="question5" value="option4">
+                <label for="option4">Opção 4</label>
+            </div>
+        </div>
+
+        <div class="form-group" id="question6">
+            <label for="question6">Pergunta 6</label>
+            <input type="text" id="question6" name="question6">
+        </div>
+
+        <div class="form-group">
+            <label for="question7">Pergunta 7</label>
+            <input type="text" id="question7" name="question7">
+        </div>
+
+        <div class="form-group">
+            <label>Pergunta 8</label>
+            <div>
+                <input type="checkbox" id="option5" name="question8" value="option5">
+                <label for="option5">Opção 5</label>
+            </div>
+            <div>
+                <input type="checkbox" id="option6" name="question8" value="option6">
+                <label for="option6">Opção 6</label>
+            </div>
+        </div>
+
+        <div class="form-group" id="question9">
+            <label for="question9">Pergunta 9</label>
+            <input type="text" id="question9" name="question9">
+        </div>
+        
+        <div class="form-group">
+            <input type="checkbox" id="consent">
+            <label for="consent">Eu concordo com os termos e condições</label>
+        </div>
+        
+        <div class="form-group">
+            <button type="button" id="save-button">Salvar e Continuar Depois</button>
+        </div>
+        
+        <div class="form-group">
+            <input type="submit" id="submit-button" value="Enviar">
+        </div>
+    </form>
+    <footer></footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
