@@ -18,6 +18,34 @@ document.addEventListener('DOMContentLoaded', (event) => {
         input.addEventListener('input', () => validateInput(input));
     });
 
+    // Função para validar botões de opção
+    function validateRadioButton(radioButtons) {
+        // Verifica se pelo menos um dos botões de opção foi selecionado
+        const isSelected = Array.from(radioButtons).some(radioButton => radioButton.checked);
+
+        if (isSelected) {
+            // Se um botão de opção foi selecionado, remove a classe 'invalid' e adiciona a classe 'valid'
+            radioButtons.forEach(radioButton => {
+                radioButton.classList.add('valid');
+                radioButton.classList.remove('invalid');
+            });
+        } else {
+            // Se nenhum botão de opção foi selecionado, remove a classe 'valid' e adiciona a classe 'invalid'
+            radioButtons.forEach(radioButton => {
+                radioButton.classList.add('invalid');
+                radioButton.classList.remove('valid');
+            });
+        }
+    }
+
+    // Seleciona todos os botões de opção
+    const radioButtons = document.querySelectorAll('input[type="radio"]');
+
+    // Adiciona um ouvinte de evento a cada botão de opção
+    radioButtons.forEach(radioButton => {
+        radioButton.addEventListener('change', () => validateRadioButton(radioButtons));
+    });
+
     // Função para mostrar/ocultar pergunta
     function toggleQuestion(option, question) {
         if (option.checked) {
@@ -69,16 +97,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
     consentCheckbox.addEventListener('change', () => toggleSubmitButton(consentCheckbox, submitButton));
 
     // Função para verificar se o formulário está validado
-    function isFormValid(inputs) {
-        return Array.from(inputs).every(input => input.classList.contains('valid'));
+    function isFormValid(inputs, radioButtons) {
+        return Array.from(inputs).every(input => input.classList.contains('valid')) &&
+               Array.from(radioButtons).every(radioButton => radioButton.classList.contains('valid'));
     }
 
     // Função para enviar formulário
-    function submitForm(event, form, inputs) {
+    function submitForm(event, form, inputs, radioButtons) {
         event.preventDefault();
-        if (isFormValid(inputs)) {
-            alert('Obrigado por preencher o formulário!');
-            form.reset();
+        if (isFormValid(inputs, radioButtons)) {
+            // Cria um objeto para armazenar os dados do formulário
+            const formData = {};
+            inputs.forEach(input => {
+                formData[input.id] = input.value;
+            });
+
+            // Envia os dados do formulário para o back-end
+            fetch('http://localhost:5138/api/FormResponse', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Obrigado por preencher o formulário!');
+                form.reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         } else {
             alert('Por favor, preencha todos os campos corretamente.');
         }
@@ -87,8 +136,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Seleciona o formulário
     const form = document.querySelector('#interactiveForm');
 
-
     // Adiciona um ouvinte de evento 'submit' ao formulário
-    form.addEventListener('submit', event => submitForm(event, form, inputs));
+    form.addEventListener('submit', event => submitForm(event, form, inputs, radioButtons));
 });
-

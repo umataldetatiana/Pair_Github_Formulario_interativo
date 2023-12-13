@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Backend.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,6 +21,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Adicione esta linha para servir o arquivo index.html como padrão
+app.UseDefaultFiles();
+
+// Adicione esta linha para servir arquivos estáticos
+app.UseStaticFiles();
 
 app.UseAuthorization();
 

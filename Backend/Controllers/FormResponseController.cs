@@ -1,13 +1,17 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Backend.Models;
+using Backend.Data;
 
-namespace YourNamespace.Controllers
+namespace Backend.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class FormResponseController : ControllerBase
     {
         private readonly FormResponseContext _context;
@@ -48,7 +52,22 @@ namespace YourNamespace.Controllers
             }
 
             _context.Entry(formResponse).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!FormResponseExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
@@ -65,7 +84,7 @@ namespace YourNamespace.Controllers
 
         // DELETE: api/FormResponse/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFormResponse(int id)
+        public async Task<ActionResult<FormResponse>> DeleteFormResponse(int id)
         {
             var formResponse = await _context.FormResponses.FindAsync(id);
             if (formResponse == null)
@@ -76,7 +95,12 @@ namespace YourNamespace.Controllers
             _context.FormResponses.Remove(formResponse);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return formResponse;
+        }
+
+        private bool FormResponseExists(int id)
+        {
+            return _context.FormResponses.Any(e => e.Id == id);
         }
     }
 }
